@@ -1,8 +1,11 @@
 {
   "name": "bitment",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "a tiny time handler",
   "main": "dist/bitment.js",
+  "keywords": [
+    "time", "date", "bitment"
+  ],
   "scripts": {
     "dev": "NODE_ENV=dev rollup -c build/rollup.config.dev.js -w",
     "build": "NODE_ENV=prod rollup -c build/rollup.config.build.js",
