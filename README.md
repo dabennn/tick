@@ -1,5 +1,4 @@
 # Bitment
----
 
 A tiny time format lib
 
