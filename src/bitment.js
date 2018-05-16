@@ -13,7 +13,7 @@ Object.setPrototypeOf = Object.setPrototypeOf ||
  * new Bitment(Date.now()).getDiff()
  */
 function Bitment() {
-  if (typeof arguments[0] === 'string' && /^\d{10}$/.test(arguments[0])) {
+  if (/^\d{10}$/.test(arguments[0])) {
     arguments[0] = arguments[0] * 1000;
   }
   if (typeof arguments[0] === 'string' && /[-.]/.test(arguments[0])) {
@@ -23,13 +23,14 @@ function Bitment() {
 
   if (DateInstance.toString() === 'Invalid Date') throw TypeError('Invalid time input: ' + arguments[0]);
 
-  this._timestamp = DateInstance.getTime();
-  this._year = DateInstance.getFullYear();
-  this._month = DateInstance.getMonth() + 1;
-  this._day = DateInstance.getDate();
-  this._hour = DateInstance.getHours();
-  this._minute = DateInstance.getMinutes();
-  this._second = DateInstance.getSeconds();
+  Bitment.prototype._timestamp = DateInstance.getTime();
+  Bitment.prototype._year = DateInstance.getFullYear();
+  Bitment.prototype._month = DateInstance.getMonth() + 1;
+  Bitment.prototype._week = DateInstance.getDay();
+  Bitment.prototype._day = DateInstance.getDate();
+  Bitment.prototype._hour = DateInstance.getHours();
+  Bitment.prototype._minute = DateInstance.getMinutes();
+  Bitment.prototype._second = DateInstance.getSeconds();
 
   Object.setPrototypeOf(DateInstance, Bitment.prototype);
   return DateInstance;
@@ -37,11 +38,21 @@ function Bitment() {
 
 Object.setPrototypeOf(Bitment.prototype, Date.prototype);
 
+const SECOND = 1000;
+const MINUTE = SECOND * 60;
+const HOUR = MINUTE * 60;
+const DAY = HOUR * 24;
+const MONTH = DAY * 30;
+const YEAR = DAY * 365;
+const WEEK_LIST = ['日', '一', '二', '三', '四', '五', '六'];
 
 function bit2Ten(num) {
   return +num < 10 ? '0' + num : num + '';
 }
 
+function isLeapYear(year) {
+  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+}
 /**
    * 格式化时间
    * @param {string} timeTpl 日期格式化模板字符串 Y-年 M-月 D-日 h-时 m-分 s-秒
@@ -49,6 +60,9 @@ function bit2Ten(num) {
    */
 Bitment.prototype.format = function (timeTpl = 'YYYY-MM-DD hh:mm:ss') {
   return timeTpl.replace('YYYY', this._year)
+    .replace('Mm', this._month)
+    .replace('Dd', this._day)
+    .replace('WW', '周' + WEEK_LIST[this._week])
     .replace('MM', bit2Ten(this._month))
     .replace('DD', bit2Ten(this._day))
     .replace('hh', bit2Ten(this._hour))
@@ -80,23 +94,16 @@ Bitment.prototype.getMap = function () {
  * @return {string} 多久前的字符串 "刚刚" "2天前"
  */
 Bitment.prototype.getDiff = function () {
-  const second = 1000;
-  const minute = second * 60;
-  const hour = minute * 60;
-  const day = hour * 24;
-  const month = day * 30;
-  const year = month * 12;
-  const now = new Date().getTime();
-  const diffValue = now - this._timestamp;
+  const diffValue = Date.now() - this._timestamp;
 
   if (diffValue < 0) { return '刚刚'; }
 
-  const diffYear = Math.floor(diffValue / year);
-  const diffMonth = Math.floor(diffValue / month);
-  const diffDay = Math.floor(diffValue / day);
-  const diffHour = Math.floor(diffValue / hour);
-  const diffMinute = Math.floor(diffValue / minute);
-  const diffSecond = Math.floor(diffValue / second);
+  const diffYear = Math.floor(diffValue / YEAR);
+  const diffMonth = Math.floor(diffValue / MONTH);
+  const diffDay = Math.floor(diffValue / DAY);
+  const diffHour = Math.floor(diffValue / HOUR);
+  const diffMinute = Math.floor(diffValue / MINUTE);
+  const diffSecond = Math.floor(diffValue / SECOND);
 
   if (diffYear >= 1) {
     return `${diffYear}年前`;
@@ -111,6 +118,38 @@ Bitment.prototype.getDiff = function () {
   } else if (60 > diffSecond && diffSecond >= 0) {
     return '刚刚';
   }
+}
+
+/**
+ * 计算多久之前或后一段时间
+ * @param {string} offset 之前或之后多少时间
+ */
+Bitment.prototype.offset = function (offset = '') {
+  const isBefore = /^-/.test(offset);
+  const signs = {
+    Y: YEAR,
+    M: MONTH,
+    D: DAY,
+    h: HOUR,
+    m: MINUTE,
+    s: SECOND,
+  };
+  offset = offset.replace(/[+-]/g, '');
+
+  let t = 0;
+  let n = '';
+  for (let i = 0; i < offset.length; i++) {
+    if (/\d/.test(offset[i])) {
+      n += offset[i];
+    } else {
+      const sign = signs[offset[i]] ? signs[offset[i]] : 0;
+      t += n * sign;
+      n = '';
+    }
+  }
+  t = isBefore ? -t : t;
+
+  return new Bitment(this._timestamp + t);
 }
 
 export default Bitment;

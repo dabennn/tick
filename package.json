@@ -1,6 +1,6 @@
 {
   "name": "bitment",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "a tiny time handler",
   "main": "dist/bitment.js",
   "keywords": [
