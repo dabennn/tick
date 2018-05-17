@@ -4,12 +4,14 @@
   "description": "a tiny time handler",
   "main": "dist/bitment.js",
   "keywords": [
-    "time", "date", "bitment"
+    "time",
+    "date",
+    "bitment"
   ],
   "scripts": {
     "dev": "NODE_ENV=dev rollup -c build/rollup.config.dev.js -w",
     "build": "NODE_ENV=prod rollup -c build/rollup.config.build.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test mocha"
   },
   "author": "daben",
   "license": "MIT",
@@ -17,7 +19,9 @@
     "babel-core": "^6.26.3",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-latest": "^6.24.1",
+    "mocha": "^5.1.1",
     "rollup-plugin-babel": "^3.0.4",
-    "rollup-plugin-uglify": "^3.0.0"
+    "rollup-plugin-uglify": "^3.0.0",
+    "should": "^13.2.1"
   }
 }
