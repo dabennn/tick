@@ -1,7 +1,7 @@
 const Bitment = require('../dist/bitment');
 const should = require('should');
 
-describe('test bitment format', () => {
+describe('test format', () => {
   it(`format timestamp 1525132800 to date string`, () => {
     const b = new Bitment(1525132800);
     b.format('YYYY.MM.DD').should.be.deepEqual('2018.05.01').and.be.a.String;
