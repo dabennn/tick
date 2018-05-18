@@ -5,21 +5,21 @@ A tiny time format lib
 ### install
 
 ```bash
-npm i tick -S
+npm i tickjs -S
 ```
 
 ### Usage
 
 As CommonJs module
 ```javascript
-const Tick = require('tick');
+const Tick = require('tickjs');
 
 const today = new Tick().format('YYYY-MM-DD');
 ```
 
 As ES module
 ```javascript
-import Tick from 'tick';
+import Tick from 'tickjs';
 
 const today = new Tick().format('YYYY-MM-DD');
 ```

@@ -1,5 +1,5 @@
 {
-  "name": "tick",
+  "name": "tickjs",
   "version": "0.0.4",
   "description": "a tiny time handler",
   "main": "dist/tick.js",
