@@ -1,9 +1,9 @@
-const Bitment = require('../dist/bitment');
+const Tick = require('../dist/tick');
 const should = require('should');
 
 describe('test getMap', () => {
   it(`format timestamp 1525132800 to date string`, () => {
-    const b = new Bitment(1525132800);
+    const b = new Tick(1525132800);
     b.getMap().should.be.deepEqual({
       year: 2018,
       month: 5,

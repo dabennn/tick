@@ -1,11 +1,11 @@
 import babel from 'rollup-plugin-babel';
 
 export default {
-  input: 'src/bitment.js',
+  input: 'src/tick.js',
   output: {
-    file: 'dist/bitment.js',
+    file: 'dist/tick.js',
     format: 'umd',
-    name: 'Bitment'
+    name: 'Tick'
   },
   plugins: [
     babel({

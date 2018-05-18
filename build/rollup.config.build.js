@@ -2,11 +2,11 @@ import babel from 'rollup-plugin-babel';
 import uglify from 'rollup-plugin-uglify';
 
 export default [{
-  input: 'src/bitment.js',
+  input: 'src/tick.js',
   output: {
-    file: 'dist/bitment.js',
+    file: 'dist/tick.js',
     format: 'umd',
-    name: 'Bitment'
+    name: 'Tick'
   },
   plugins: [
     babel({
@@ -14,24 +14,24 @@ export default [{
     })
   ]
 }, {
-  input: 'src/bitment.js',
+  input: 'src/tick.js',
   output: [
     {
-      file: 'dist/bitment.min.js',
+      file: 'dist/tick.min.js',
       format: 'umd',
-      name: 'Bitment'
+      name: 'Tick'
     },
     {
-      file: 'dist/bitment.cjs.min.js',
+      file: 'dist/tick.cjs.min.js',
       format: 'cjs'
     },
     {
-      file: 'dist/bitment.iife.min.js',
+      file: 'dist/tick.iife.min.js',
       format: 'iife',
-      name: 'Bitment'
+      name: 'Tick'
     },
     {
-      file: 'dist/bitment.esm.min.js',
+      file: 'dist/tick.esm.min.js',
       format: 'es'
     }
   ],

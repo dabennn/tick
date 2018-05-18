@@ -5,14 +5,14 @@ Object.setPrototypeOf = Object.setPrototypeOf ||
   };
 
 /**
- * Bitment 日期处理
+ * Tick 日期处理
  * @param 同Date类接受的参数
  * @example
- * new Bitment(Date.now()).format('YYYY-MM-DD')
- * new Bitment(Date.now()).getMap()
- * new Bitment(Date.now()).getDiff()
+ * new Tick(Date.now()).format('YYYY-MM-DD')
+ * new Tick(Date.now()).getMap()
+ * new Tick(Date.now()).getDiff()
  */
-function Bitment() {
+function Tick() {
   if (/^\d{10}$/.test(arguments[0])) {
     arguments[0] = arguments[0] * 1000;
   }
@@ -23,20 +23,20 @@ function Bitment() {
 
   if (DateInstance.toString() === 'Invalid Date') throw TypeError('Invalid time input: ' + arguments[0]);
 
-  Bitment.prototype._timestamp = DateInstance.getTime();
-  Bitment.prototype._year = DateInstance.getFullYear();
-  Bitment.prototype._month = DateInstance.getMonth() + 1;
-  Bitment.prototype._week = DateInstance.getDay();
-  Bitment.prototype._day = DateInstance.getDate();
-  Bitment.prototype._hour = DateInstance.getHours();
-  Bitment.prototype._minute = DateInstance.getMinutes();
-  Bitment.prototype._second = DateInstance.getSeconds();
+  Tick.prototype._timestamp = DateInstance.getTime();
+  Tick.prototype._year = DateInstance.getFullYear();
+  Tick.prototype._month = DateInstance.getMonth() + 1;
+  Tick.prototype._week = DateInstance.getDay();
+  Tick.prototype._day = DateInstance.getDate();
+  Tick.prototype._hour = DateInstance.getHours();
+  Tick.prototype._minute = DateInstance.getMinutes();
+  Tick.prototype._second = DateInstance.getSeconds();
 
-  Object.setPrototypeOf(DateInstance, Bitment.prototype);
+  Object.setPrototypeOf(DateInstance, Tick.prototype);
   return DateInstance;
 }
 
-Object.setPrototypeOf(Bitment.prototype, Date.prototype);
+Object.setPrototypeOf(Tick.prototype, Date.prototype);
 
 const SECOND = 1000;
 const MINUTE = SECOND * 60;
@@ -58,7 +58,7 @@ function isLeapYear(year) {
    * @param {string} timeTpl 日期格式化模板字符串 Y-年 M-月 D-日 h-时 m-分 s-秒
    * @return {string} 格式化后的字符串
    */
-Bitment.prototype.format = function (timeTpl = 'YYYY-MM-DD hh:mm:ss') {
+Tick.prototype.format = function (timeTpl = 'YYYY-MM-DD hh:mm:ss') {
   return timeTpl.replace('YYYY', this._year)
     .replace('Mm', this._month)
     .replace('Dd', this._day)
@@ -73,7 +73,7 @@ Bitment.prototype.format = function (timeTpl = 'YYYY-MM-DD hh:mm:ss') {
  * 获取对象形式的时间解析结果
  * @return {object} 包含具体时间解析的对象
  */
-Bitment.prototype.getMap = function () {
+Tick.prototype.getMap = function () {
   return {
     year: this._year,
     month: this._month,
@@ -93,7 +93,7 @@ Bitment.prototype.getMap = function () {
  * 多久前 用于评论等显示 "多久前"
  * @return {string} 多久前的字符串 "刚刚" "2天前"
  */
-Bitment.prototype.getDiff = function () {
+Tick.prototype.getDiff = function () {
   const diffValue = Date.now() - this._timestamp;
 
   if (diffValue < 0) { return '刚刚'; }
@@ -124,7 +124,7 @@ Bitment.prototype.getDiff = function () {
  * 计算多久之前或后一段时间
  * @param {string} offset 之前或之后多少时间
  */
-Bitment.prototype.offset = function (offset = '') {
+Tick.prototype.offset = function (offset = '') {
   const isBefore = /^-/.test(offset);
   const signs = {
     Y: YEAR,
@@ -149,7 +149,7 @@ Bitment.prototype.offset = function (offset = '') {
   }
   t = isBefore ? -t : t;
 
-  return new Bitment(this._timestamp + t);
+  return new Tick(this._timestamp + t);
 }
 
-export default Bitment;
+export default Tick;

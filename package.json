@@ -1,12 +1,12 @@
 {
-  "name": "bitment",
+  "name": "tick",
   "version": "0.0.4",
   "description": "a tiny time handler",
-  "main": "dist/bitment.js",
+  "main": "dist/tick.js",
   "keywords": [
     "time",
     "date",
-    "bitment"
+    "tick"
   ],
   "scripts": {
     "dev": "NODE_ENV=dev rollup -c build/rollup.config.dev.js -w",
