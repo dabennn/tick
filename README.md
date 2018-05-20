@@ -10,7 +10,7 @@ npm i tickjs -S
 
 ### Usage
 
-As CommonJs module
+As CommonJS module
 ```javascript
 const Tick = require('tickjs');
 
@@ -40,8 +40,11 @@ Tick inherit [Date instance](https://developer.mozilla.org/en-US/docs/Web/JavaSc
   ```javascript
   new Tick().format('YYYY-MM-DD');
   // YYYY -> Year
+  // WW -> Week
   // MM -> Month
   // DD -> Day
+  // Md -> Month(Number)
+  // Dd -> Day(Nubmer)
   // hh -> Hour
   // mm -> Minute
   // ss -> Second

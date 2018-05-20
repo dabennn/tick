@@ -126,30 +126,45 @@ Tick.prototype.getDiff = function () {
  */
 Tick.prototype.offset = function (offset = '') {
   const isBefore = /^-/.test(offset);
+  offset = offset.replace(/[+-]g/, '');
   const signs = {
-    Y: YEAR,
-    M: MONTH,
     D: DAY,
     h: HOUR,
     m: MINUTE,
     s: SECOND,
   };
-  offset = offset.replace(/[+-]/g, '');
 
-  let t = 0;
   let n = '';
+  let t = 0;
   for (let i = 0; i < offset.length; i++) {
-    if (/\d/.test(offset[i])) {
-      n += offset[i];
+    const s = offset[i];
+    if (/\d/.test(s)) {
+      n += s;
     } else {
-      const sign = signs[offset[i]] ? signs[offset[i]] : 0;
-      t += n * sign;
-      n = '';
+      if (s === 'Y') {
+        n = +n;
+        this.setFullYear(isBefore ? this.getFullYear() - n : this.getFullYear() + n);
+        n = '';
+      } else if (s === 'M') {
+        n = +n;
+        if (n >= 12) {
+          const q = n % 12;
+          const y = Math.floor(n / 12);
+          this.setFullYear(isBefore ? this.getFullYear() - y : this.getFullYear() + y);
+          this.setMonth(isBefore ? this.getMonth() - q : this.getMonth() + q);
+          n = '';
+        } else {
+          this.setMonth(isBefore ? this.getMonth() - n: this.getMonth() + n);
+          n = '';
+        }
+      } else {
+        t += n * (signs[s] || 0);
+        n = '';
+      }
     }
   }
   t = isBefore ? -t : t;
-
-  return new Tick(this._timestamp + t);
+  return new Tick(this.getTime() + t);
 }
 
 export default Tick;
