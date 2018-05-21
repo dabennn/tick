@@ -50,9 +50,6 @@ function bit2Ten(num) {
   return +num < 10 ? '0' + num : num + '';
 }
 
-function isLeapYear(year) {
-  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
-}
 /**
    * 格式化时间
    * @param {string} timeTpl 日期格式化模板字符串 Y-年 M-月 D-日 h-时 m-分 s-秒
@@ -165,6 +162,36 @@ Tick.prototype.offset = function (offset = '') {
   }
   t = isBefore ? -t : t;
   return new Tick(this.getTime() + t);
+}
+
+/**
+ * 比较时间的三个方法
+ * @Author   daben<dabennn07@gmail.com>
+ * @DateTime 2018-05-21T23:22:08+0800
+ * @param    {String|Number}                 date 任何可以被Date对象解析的时间
+ * @return   {Boolean}
+ */
+Tick.prototype.isBefore = function (date) {
+  return this._timestamp < new Tick(date).getTime();
+}
+
+Tick.prototype.isAfter = function (date) {
+  return this._timestamp > new Tick(date).getTime();
+}
+
+Tick.prototype.isEqual = function (date) {
+  return this._timestamp === new Tick(date).getTime();
+}
+
+/**
+ * 判断是否是闰年
+ * @Author   daben<dabennn07@gmail.com>
+ * @DateTime 2018-05-22T00:06:59+0800
+ * @param    {Number}                   year 年份
+ * @return   {Boolean}
+ */
+Tick.isLeapYear = function (year) {
+  return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 }
 
 export default Tick;
