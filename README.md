@@ -57,12 +57,21 @@ Tick inherit [Date instance](https://developer.mozilla.org/en-US/docs/Web/JavaSc
   new Tick().getMap(); // { year: '..', month: '..', day: '..', ... }
   ```
 
-##### getDiff
+##### getDiff()
 - Usage:
   Get the description of time difference.
   ```javascript
   new Tick(Date.now() - 20000000).getDiff(); // 5小时前
   ```
+
+##### offset(timeOffset)
+- Arguments:
+  - {string} timeOffset
+- Usage:
+  calculate time offset.
+  ```javascript
+  new Tick('2018-05-01').offset('1Y'); // '2019-05-01T00:00:00.000Z'
+  new Tick('2018-05-01').offset('-1Y1M'); // '2017-04-01T00:00:00.000Z'
 
 ### LICENSE
 MIT
