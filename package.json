@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "NODE_ENV=dev rollup -c build/rollup.config.dev.js -w",
     "build": "NODE_ENV=prod rollup -c build/rollup.config.build.js",
-    "test": "NODE_ENV=test mocha"
+    "test": "NODE_ENV=test mocha -w -b"
   },
   "author": "daben",
   "license": "MIT",
