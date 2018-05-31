@@ -1,6 +1,6 @@
 {
   "name": "tickjs",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "a tiny time handler",
   "main": "dist/tick.js",
   "keywords": [
@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "NODE_ENV=dev rollup -c build/rollup.config.dev.js -w",
     "build": "NODE_ENV=prod rollup -c build/rollup.config.build.js",
-    "test": "NODE_ENV=test mocha"
+    "test": "NODE_ENV=test mocha -w -b"
   },
   "author": "daben",
   "license": "MIT",
