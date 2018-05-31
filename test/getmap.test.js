@@ -17,6 +17,6 @@ describe('test getMap', () => {
       $hour: '08',
       $minute: '00',
       $second: '00'
-    }).and.be.an.Object;
+    }).and.be.an.Object();
   });
 })
