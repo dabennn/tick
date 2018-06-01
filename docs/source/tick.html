@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">(function (global, factory) {
+  typeof exports === &#39;object&#39; &amp;&amp; typeof module !== &#39;undefined&#39; ? module.exports = factory() :
+  typeof define === &#39;function&#39; &amp;&amp; define.amd ? define(factory) :
+  (global.Tick = factory());
+}(this, (function () { &#39;use strict&#39;;
+
+  Object.setPrototypeOf = Object.setPrototypeOf || function (obj, proto) {
+    obj.__proto__ = proto;
+    return obj;
+  };
+
+<span id='Tick'>  /**
+</span>   * Tick 日期处理
+   * @class Tick
+   * @extends Date
+   * @param {String|Number} date 同Date类接受的参数
+   * @example
+   * new Tick(Date.now()).format(&#39;YYYY-MM-DD&#39;)
+   * new Tick(Date.now()).getMap()
+   * new Tick(Date.now()).getDiff()
+   */
+  function Tick() {
+    if (/^\d{10}$/.test(arguments[0])) {
+      arguments[0] = arguments[0] * 1000;
+    }
+    if (typeof arguments[0] === &#39;string&#39; &amp;&amp; /[-.]/.test(arguments[0])) {
+      arguments[0] = arguments[0].replace(/[-.]/g, &#39;/&#39;);
+    }
+    var DateInstance = new (Function.prototype.bind.apply(Date, [Date].concat(Array.prototype.slice.call(arguments))))();
+
+    if (DateInstance.toString() === &#39;Invalid Date&#39;) throw TypeError(&#39;Invalid time input: &#39; + arguments[0]);
+
+    Tick.prototype._timestamp = DateInstance.getTime();
+    Tick.prototype._year = DateInstance.getFullYear();
+    Tick.prototype._month = DateInstance.getMonth() + 1;
+    Tick.prototype._week = DateInstance.getDay();
+    Tick.prototype._day = DateInstance.getDate();
+    Tick.prototype._hour = DateInstance.getHours();
+    Tick.prototype._minute = DateInstance.getMinutes();
+    Tick.prototype._second = DateInstance.getSeconds();
+
+    Object.setPrototypeOf(DateInstance, Tick.prototype);
+    return DateInstance;
+  }
+
+  Object.setPrototypeOf(Tick.prototype, Date.prototype);
+
+  var SECOND = 1000;
+  var MINUTE = SECOND * 60;
+  var HOUR = MINUTE * 60;
+  var DAY = HOUR * 24;
+  var MONTH = DAY * 30;
+  var YEAR = DAY * 365;
+  var WEEK_LIST = [&#39;日&#39;, &#39;一&#39;, &#39;二&#39;, &#39;三&#39;, &#39;四&#39;, &#39;五&#39;, &#39;六&#39;];
+
+  function bit2Ten(num) {
+    return +num &lt; 10 ? &#39;0&#39; + num : num + &#39;&#39;;
+  }
+
+<span id='Tick-method-format'>  /**
+</span>   * 格式化时间
+   * @param {String} timeTpl 日期格式化模板字符串 Y-年 M-月 D-日 h-时 m-分 s-秒
+   * @return {String} 格式化后的字符串
+   */
+  Tick.prototype.format = function () {
+    var timeTpl = arguments.length &gt; 0 &amp;&amp; arguments[0] !== undefined ? arguments[0] : &#39;YYYY-MM-DD hh:mm:ss&#39;;
+
+    return timeTpl.replace(&#39;YYYY&#39;, this._year).replace(&#39;Mm&#39;, this._month).replace(&#39;Dd&#39;, this._day).replace(&#39;WW&#39;, &#39;周&#39; + WEEK_LIST[this._week]).replace(&#39;MM&#39;, bit2Ten(this._month)).replace(&#39;DD&#39;, bit2Ten(this._day)).replace(&#39;hh&#39;, bit2Ten(this._hour)).replace(&#39;mm&#39;, bit2Ten(this._minute)).replace(&#39;ss&#39;, bit2Ten(this._second));
+  };
+<span id='Tick-method-getMap'>  /**
+</span>   * 获取对象形式的时间解析结果
+   * @return {Object} 包含具体时间解析的对象
+   */
+  Tick.prototype.getMap = function () {
+    return {
+      year: this._year,
+      month: this._month,
+      day: this._day,
+      hour: this._hour,
+      minute: this._minute,
+      second: this._second,
+      $year: bit2Ten(this._year),
+      $month: bit2Ten(this._month),
+      $day: bit2Ten(this._day),
+      $hour: bit2Ten(this._hour),
+      $minute: bit2Ten(this._minute),
+      $second: bit2Ten(this._second)
+    };
+  };
+<span id='Tick-method-getDiff'>  /**
+</span>   * 多久前 用于评论等显示 &quot;多久前&quot;
+   * @return {String} 多久前的字符串 &quot;刚刚&quot; &quot;2天前&quot;
+   */
+  Tick.prototype.getDiff = function () {
+    var diffValue = Date.now() - this._timestamp;
+
+    if (diffValue &lt; 0) {
+      return &#39;刚刚&#39;;
+    }
+
+    var diffYear = Math.floor(diffValue / YEAR);
+    var diffMonth = Math.floor(diffValue / MONTH);
+    var diffDay = Math.floor(diffValue / DAY);
+    var diffHour = Math.floor(diffValue / HOUR);
+    var diffMinute = Math.floor(diffValue / MINUTE);
+    var diffSecond = Math.floor(diffValue / SECOND);
+
+    if (diffYear &gt;= 1) {
+      return diffYear + &#39;\u5E74\u524D&#39;;
+    } else if (12 &gt; diffMonth &amp;&amp; diffMonth &gt;= 1) {
+      return diffMonth + &#39;\u4E2A\u6708\u524D&#39;;
+    } else if (30 &gt; diffDay &amp;&amp; diffDay &gt;= 1) {
+      return diffDay + &#39;\u5929\u524D&#39;;
+    } else if (60 &gt; diffHour &amp;&amp; diffHour &gt;= 1) {
+      return diffHour + &#39;\u5C0F\u65F6\u524D&#39;;
+    } else if (60 &gt; diffMinute &amp;&amp; diffMinute &gt;= 1) {
+      return diffMinute + &#39;\u5206\u949F\u524D&#39;;
+    } else if (60 &gt; diffSecond &amp;&amp; diffSecond &gt;= 0) {
+      return &#39;刚刚&#39;;
+    }
+  };
+
+<span id='Tick-method-offset'>  /**
+</span>   * 计算多久之前或后一段时间
+   * @param {String} offset 之前或之后多少时间
+   */
+  Tick.prototype.offset = function () {
+    var offset = arguments.length &gt; 0 &amp;&amp; arguments[0] !== undefined ? arguments[0] : &#39;&#39;;
+
+    var isBefore = /^-/.test(offset);
+    offset = offset.replace(/[+-]g/, &#39;&#39;);
+    var signs = {
+      D: DAY,
+      h: HOUR,
+      m: MINUTE,
+      s: SECOND
+    };
+
+    var n = &#39;&#39;;
+    var t = 0;
+    for (var i = 0; i &lt; offset.length; i++) {
+      var s = offset[i];
+      if (/\d/.test(s)) {
+        n += s;
+      } else {
+        if (s === &#39;Y&#39;) {
+          n = +n;
+          this.setFullYear(isBefore ? this.getFullYear() - n : this.getFullYear() + n);
+          n = &#39;&#39;;
+        } else if (s === &#39;M&#39;) {
+          n = +n;
+          if (n &gt;= 12) {
+            var q = n % 12;
+            var y = Math.floor(n / 12);
+            this.setFullYear(isBefore ? this.getFullYear() - y : this.getFullYear() + y);
+            this.setMonth(isBefore ? this.getMonth() - q : this.getMonth() + q);
+            n = &#39;&#39;;
+          } else {
+            this.setMonth(isBefore ? this.getMonth() - n : this.getMonth() + n);
+            n = &#39;&#39;;
+          }
+        } else {
+          t += n * (signs[s] || 0);
+          n = &#39;&#39;;
+        }
+      }
+    }
+    t = isBefore ? -t : t;
+    return new Tick(this.getTime() + t);
+  };
+
+<span id='Tick-method-isBefore'>  /**
+</span>   * 比较时间的三个方法
+   * @author   daben&lt;dabennn07@gmail.com&gt;
+   * @param    {String|Number}                 date 任何可以被Date对象解析的时间
+   * @return   {Boolean}
+   */
+  Tick.prototype.isBefore = function (date) {
+    return this._timestamp &lt; new Tick(date).getTime();
+  };
+
+  Tick.prototype.isAfter = function (date) {
+    return this._timestamp &gt; new Tick(date).getTime();
+  };
+
+  Tick.prototype.isEqual = function (date) {
+    return this._timestamp === new Tick(date).getTime();
+  };
+
+<span id='Tick-method-isLeapYear'>  /**
+</span>   * 判断是否是闰年
+   * @author   daben&lt;dabennn07@gmail.com&gt;
+   * @param    {Number}                   year 年份
+   * @return   {Boolean}
+   */
+  Tick.isLeapYear = function (year) {
+    return year % 4 === 0 &amp;&amp; year % 100 !== 0 || year % 400 === 0;
+  };
+
+  return Tick;
+
+})));
+</pre>
+</body>
+</html>

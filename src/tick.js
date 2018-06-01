@@ -6,7 +6,9 @@ Object.setPrototypeOf = Object.setPrototypeOf ||
 
 /**
  * Tick 日期处理
- * @param 同Date类接受的参数
+ * @class Tick
+ * @extends Date
+ * @param {String|Number} date 同Date类接受的参数
  * @example
  * new Tick(Date.now()).format('YYYY-MM-DD')
  * new Tick(Date.now()).getMap()
@@ -51,10 +53,10 @@ function bit2Ten(num) {
 }
 
 /**
-   * 格式化时间
-   * @param {string} timeTpl 日期格式化模板字符串 Y-年 M-月 D-日 h-时 m-分 s-秒
-   * @return {string} 格式化后的字符串
-   */
+ * 格式化时间
+ * @param {String} timeTpl 日期格式化模板字符串 Y-年 M-月 D-日 h-时 m-分 s-秒
+ * @return {String} 格式化后的字符串
+ */
 Tick.prototype.format = function (timeTpl = 'YYYY-MM-DD hh:mm:ss') {
   return timeTpl.replace('YYYY', this._year)
     .replace('Mm', this._month)
@@ -68,7 +70,7 @@ Tick.prototype.format = function (timeTpl = 'YYYY-MM-DD hh:mm:ss') {
 }
 /**
  * 获取对象形式的时间解析结果
- * @return {object} 包含具体时间解析的对象
+ * @return {Object} 包含具体时间解析的对象
  */
 Tick.prototype.getMap = function () {
   return {
@@ -88,7 +90,7 @@ Tick.prototype.getMap = function () {
 }
 /**
  * 多久前 用于评论等显示 "多久前"
- * @return {string} 多久前的字符串 "刚刚" "2天前"
+ * @return {String} 多久前的字符串 "刚刚" "2天前"
  */
 Tick.prototype.getDiff = function () {
   const diffValue = Date.now() - this._timestamp;
@@ -119,7 +121,7 @@ Tick.prototype.getDiff = function () {
 
 /**
  * 计算多久之前或后一段时间
- * @param {string} offset 之前或之后多少时间
+ * @param {String} offset 之前或之后多少时间
  */
 Tick.prototype.offset = function (offset = '') {
   const isBefore = /^-/.test(offset);
@@ -166,8 +168,7 @@ Tick.prototype.offset = function (offset = '') {
 
 /**
  * 比较时间的三个方法
- * @Author   daben<dabennn07@gmail.com>
- * @DateTime 2018-05-21T23:22:08+0800
+ * @author   daben<dabennn07@gmail.com>
  * @param    {String|Number}                 date 任何可以被Date对象解析的时间
  * @return   {Boolean}
  */
@@ -185,8 +186,7 @@ Tick.prototype.isEqual = function (date) {
 
 /**
  * 判断是否是闰年
- * @Author   daben<dabennn07@gmail.com>
- * @DateTime 2018-05-22T00:06:59+0800
+ * @author   daben<dabennn07@gmail.com>
  * @param    {Number}                   year 年份
  * @return   {Boolean}
  */
